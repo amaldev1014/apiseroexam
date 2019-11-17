@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sns="http://www.mulesoft.org/schema/mule/sns" xmlns:s3="http://www.mulesoft.org/schema/mule/s3"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/s3 http://www.mulesoft.org/schema/mule/s3/current/mule-s3.xsd
+http://www.mulesoft.org/schema/mule/sns http://www.mulesoft.org/schema/mule/sns/current/mule-sns.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fbdb9cc2-2803-4cd1-b623-f15d66a11bb9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<s3:config name="Amazon_S3_Configuration" doc:name="Amazon S3 Configuration" doc:id="ae22f411-7c39-4f08-86b2-76ea8c8a742f" >
+		<s3:basic-connection accessKey="AKIAJWKZDPLHRO4WPP7A" secretKey="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" region="AP_SOUTH_1"/>
+	</s3:config>
+	<flow name="awsques1Flow" doc:id="9597250c-4d78-4d2f-9c84-657d95aa05f1" >
+		<s3:new-object-trigger doc:name="On New Object" doc:id="0167bf4c-dbf6-4b91-aefa-5267bc6ea303" config-ref="Amazon_S3_Configuration" bucketName="mybucket3-amaldev">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</s3:new-object-trigger>
+		<logger level="INFO" doc:name="Logger" doc:id="5b453527-a7d0-4e39-93d6-49f889ffb0c7" message="payload"/>
+		<s3:get-object doc:name="Get object" doc:id="61935de9-919d-4b6d-9202-d0fd2570692c" config-ref="Amazon_S3_Configuration" bucketName="mybucket2-amaldev" key="#[payload.key]"/>
+	</flow>
+</mule>

@@ -1,0 +1,13 @@
+{
+"Employees":
+[
+{"name": "amaldev",
+ "age": 25,
+"designation" : "developer"},
+{
+"name": "sabu",
+ "age":23,
+ "designation":"accountant"
+}
+]
+}
